@@ -8,6 +8,7 @@ class BaseElement(Base):
         self._locator = locator_by, locator_value
         self._element = None
         self._parent = parent
+        self._default_element_class = BaseElement
 
     @property
     def element(self):
@@ -34,28 +35,11 @@ class BaseElement(Base):
     def send_keys(self, *args):
         self.element.send_keys(*args)
 
-    def __getattr__(self, item):
-        locator = self._locators.get(item)
-
-        if not locator:
-            raise AttributeError(item)
-
-        if len(locator) == 3:
-            element_class, locator_by, locator_value = locator
-            return element_class(locator_by, locator_value, self)
-        else:
-            locator_by, locator_value = locator
-            return BaseElement(locator_by, locator_value, self)
-
-        raise AttributeError(item)
-
     def scroll_into_view(self):
         self._element.parent.execute_script("arguments[0].scrollIntoView();", self._element)
 
 
 class BaseListElement(BaseElement):
-    _locators = {}
-
     def __init__(self, element, parent=None):
         super().__init__(None, None, parent)
         self._element = element

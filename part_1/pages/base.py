@@ -3,6 +3,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 
 class Base:
+    _locators = {}
+
     @property
     def driver(self):
         pass
@@ -13,3 +15,16 @@ class Base:
 
     def find_elements(self, *args):
         return self.driver.find_elements(*args)
+
+    def __getattr__(self, item):
+        locator = self._locators.get(item)
+
+        if not locator:
+            raise AttributeError(item)
+
+        if len(locator) == 3:
+            element_class, locator_by, locator_value = locator
+            return element_class(locator_by, locator_value, self)
+        else:
+            locator_by, locator_value = locator
+            return self._default_element_class(locator_by, locator_value, self)
