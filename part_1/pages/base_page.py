@@ -1,5 +1,4 @@
 from pages.base_element import BaseElement, BaseElementList
-
 from pages.base import Base
 
 
