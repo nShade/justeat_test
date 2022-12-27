@@ -1,15 +1,18 @@
-from pages.base_element import BaseElement, BaseElementList
+from pages.base_element import BaseElementWrapper, BaseElementList
+from pages.base import BaseLocatorHolder
+from selenium.webdriver.support.expected_conditions import presence_of_element_located
 
-from pages.base import Base
 
-
-class BasePage(Base):
+class BasePage(BaseLocatorHolder):
     _locators = {}
 
     def __init__(self, driver):
-        self._driver = driver
-        self._default_element_class = BaseElement
+        super().__init__(driver)
+        self.default_wrapper_class = BaseElementWrapper
 
-    @property
-    def driver(self):
-        return self._driver
+    def find_element(self, *args):
+        self.wait(10).until(presence_of_element_located(args))
+        return self.driver.find_element(*args)
+
+    def find_elements(self, *args):
+        return self.driver.find_elements(*args)

@@ -1,9 +1,9 @@
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
-from pages.base_element import BaseElement, BaseElementList
+from pages.base_element import BaseElementWrapper, BaseElementList
 
 
-class SearchPanel(BaseElement):
+class SearchPanel(BaseElementWrapper):
     _locators = {
         'locations': (BaseElementList, By.XPATH, './/li[@data-qa="location-panel-results-item-element"]')
     }
@@ -17,4 +17,5 @@ class MainPage(BasePage):
 
     def search_address(self, address):
         self.search_input.send_keys(address)
+        self.wait(3).until(lambda driver: len(self.search_panel.locations) > 0)
         self.search_panel.locations[0].click()
