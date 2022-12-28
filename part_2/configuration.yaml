@@ -1,0 +1,9 @@
+base_url: http://coop.apps.symfonycasts.com/api/
+auth_url: http://coop.apps.symfonycasts.com/token
+user_info:
+  id: ''
+  first_name:
+  last_name:
+  email:
+client_id:
+client_secret:

@@ -1,7 +1,7 @@
 import re
 from selenium.webdriver.common.by import By
 from selenium.common import TimeoutException
-from helpers.wait import WaitChange
+from utils.wait import WaitChange
 from pages.base_page import BasePage
 from pages.base_element import BaseElementWrapper, BaseElementList
 
@@ -132,7 +132,7 @@ class SearchPage(BasePage):
     def wait_loaded(self):
         try:
             self.wait(2).until(lambda driver: not self.loaded())
-        except TimeoutError:
+        except TimeoutException:
             pass
 
         self.wait(10).until(lambda driver: self.loaded())

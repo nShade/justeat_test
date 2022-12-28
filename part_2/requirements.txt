@@ -1,0 +1,4 @@
+pytest
+requests
+json-checker
+pyyaml

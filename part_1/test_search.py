@@ -34,6 +34,17 @@ class TestSearchRestaurants:
 
         return restaurants
 
+    def __check_restaurants_have_cuisine(self, search_page, category_name):
+        search_page.restaurants.scroll_until_loaded()
+        wrong_restaurants = [restaurant.name
+                             for restaurant in search_page.restaurants
+                             if category_name not in restaurant.cuisines]
+
+        error_rest_list = '\n'.join(wrong_restaurants)
+
+        assert len(wrong_restaurants) == 0, \
+            f"Expected having {category_name} in cuisines list. Following restaurants don't have it:\n" \
+            f"{error_rest_list}"
 
     @pytest.mark.usefixtures('search_address')
     @pytest.mark.parametrize('rado_element_name, expected_mov', (
@@ -57,18 +68,6 @@ class TestSearchRestaurants:
         assert len(wrong_restaurants) == 0, \
             f"Expected order value is {expected_mov} Following restaurants have minimum " \
             f"order value above that: \n" \
-            f"{error_rest_list}"
-
-    def __check_restaurants_have_cuisine(self, search_page, category_name):
-        search_page.restaurants.scroll_until_loaded()
-        wrong_restaurants = [restaurant.name
-                             for restaurant in search_page.restaurants
-                             if category_name not in restaurant.cuisines]
-
-        error_rest_list = '\n'.join(wrong_restaurants)
-
-        assert len(wrong_restaurants) == 0, \
-            f"Expected having {category_name} in cuisines list. Following restaurants don't have it:\n" \
             f"{error_rest_list}"
 
     @pytest.mark.usefixtures('search_address')
@@ -126,7 +125,6 @@ class TestSearchRestaurants:
 
         error_rest_list = '\n'.join(wrong_restaurants)
 
-        # not sure what happening here, but looks like a bug. Those badges are not shown in Crome, but are shown in Opera.
         assert len(wrong_restaurants) == 0, \
             f"Expected offer badge on all restaurants. Following restaurants don't have it:\n" \
             f"{error_rest_list}"
